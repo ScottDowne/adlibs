@@ -432,7 +432,14 @@
   <script src="js/lib/popcorn-complete.min.js"></script>
   <script src="js/lib/underscore-min.js"></script>
   <script src="js/app.js"></script>
-
+  <?php
+    $dirty = base64_decode( $_REQUEST[ "app_data" ] );
+    $clean = str_replace( array( "[", "&", "<", ">", "]" ), "", $dirty );
+    if ( !$clean ) {
+      $clean = "{}";
+    }
+    echo "<script>var facebookData = " . $clean . ";</script>";
+  ?>
   <script>
   // Set PHP-dependent global variables.
   $(document).ready(function(){

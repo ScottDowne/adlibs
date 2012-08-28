@@ -114,6 +114,28 @@ $(document).ready(function(){
       $('#postroll').hide();
       $('#controls').show();
     });
+    
+    $('#postroll #share-to-fb').click(function(){
+      
+      var testData = {
+        ad: "smalltown",
+        choices: [
+        "1015199433470328"
+        ],
+        dateCreated: "Wed Aug 15 2012 17:19:55 GMT-1000 (HST)",
+        ip: "127.0.0.1"
+      };
+
+      FB.ui(
+      {
+          method: 'stream.publish',
+          attachment: {
+              name: "My campaign",
+              description: 'PBS Admaker',
+              href: "http://apps.facebook.com/admaker/?app_data=" + btoa( JSON.stringify( testData ) )
+          }
+      });
+    });    
 
     // Load Popcorn and Facebook actions for this video.
     switch(ad) {
