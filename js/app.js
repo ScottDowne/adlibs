@@ -76,10 +76,10 @@ $(document).ready(function() {
     ad = window.adlib_data['ad'];
 
     // Once the Facebook API is loaded, play the video.
-    $(document).live('facebook_loaded', function(){
-
+    $(document).on('facebook_loaded', function(){
+      $(document).off('facebook_loaded');
       // Insert the data we've been given.
-      add_custom_content_to_ad(window.adlib_data);
+      add_custom_content_to_ad(window.adlib_data.choices);
 
       // Start the ad.
       start_ad(ad);
@@ -353,16 +353,18 @@ window.fbAsyncInit = function() {
     xfbml      : true                         // Parse XFBML.
   });
 
-  // Indicate that we're ready.
-  $(document).trigger('facebook_loaded');
 
   FB.getLoginStatus(check_facebook_login_status);
   FB.Event.subscribe('auth.authResponseChange', check_facebook_login_status);
+
+
 
   // Check login.
   function check_facebook_login_status(response) {
     if (response.status === 'connected')
     {
+      // Indicate that we're ready.
+      $(document).trigger('facebook_loaded');
       // User is logged in to Facebook and has authenticated our app.
       var uid = response.authResponse.userID;
       var accessToken = response.authResponse.accessToken;
@@ -777,7 +779,6 @@ function handle_choice_clicking_and_deciding(ad) {
     continueBtn.click(function() {
       $(this).off('click');
       var data = $(this).siblings('.choices').find('ul').find('.selected').data();
-
       add_custom_content_to_ad(data.options);
     });
 
@@ -838,10 +839,8 @@ function handle_choice_clicking_and_deciding(ad) {
 
 // Insert custom content into the ad.
 function add_custom_content_to_ad(data) {
-
   // Iterate through the data object.
   $.each(data, function(destination, content) {
-
     // If we find the phrase 'photo' in the key, query Facebook for that image and print it.
     if (destination.indexOf('photo') !== -1) {
       FB.api('http://graph.facebook.com/' + content, function(response) {
