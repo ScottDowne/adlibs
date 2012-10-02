@@ -513,8 +513,9 @@ $(document).ready(function() {
 
         // If sharing is successful.
         function(response) {
-
-          _gaq.push(['_trackPageview', '/shared']);
+          if (typeof _gaq !== 'undefined' && _gaq !== null) {
+            _gaq.push(['_trackPageview']);
+          }
           // If the post was published, make the Share button unclickable.
           if (typeof response !== 'undefined' && typeof response.post_id !== 'undefined')
             $('#video-postroll #share').removeClass('active').addClass('inactive');
